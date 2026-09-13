@@ -1,0 +1,37 @@
+# MedForget-bench — Python dependencies
+# Install with: pip install -r requirements.txt
+
+# Deep learning
+torch>=2.2
+torchvision>=0.17
+
+# Medical imaging datasets
+medmnist>=3.0
+
+# Numeric / data wrangling
+numpy
+pandas
+
+# Metrics
+scikit-learn
+
+# Plotting
+matplotlib
+seaborn
+
+# Config
+pyyaml
+
+# CLI
+typer
+
+# Progress bars
+tqdm
+
+# Testing
+pytest
+
+# Jupyter notebook support (for exploration notebook)
+jupyter
+ipykernel
+ipywidgets

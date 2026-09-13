@@ -1,0 +1,63 @@
+# ======================
+# Python
+# ======================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ======================
+# Virtual environment
+# ======================
+.venv/
+venv/
+env/
+ENV/
+
+# ======================
+# Jupyter
+# ======================
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ======================
+# Results, checkpoints (large files — keep locally, not in git)
+# ======================
+results/
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# ======================
+# Data downloaded by medmnist (auto-downloaded at runtime)
+# ======================
+data/
+
+# ======================
+# IDE / OS
+# ======================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ======================
+# Logs
+# ======================
+*.log
+logs/
+
+# ======================
+# Coverage / testing artifacts
+# ======================
+.coverage
+htmlcov/
+.pytest_cache/
