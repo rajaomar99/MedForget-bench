@@ -1,0 +1,55 @@
+# configs/experiments/exp001_classwise_pathmnist.yaml
+# ----------------------------------------------------
+# Experiment 001 — class-wise forgetting on PathMNIST
+#
+# This is the primary benchmark experiment for the initial release.
+# Run each method with all three seeds and compare on all five metrics.
+#
+# Usage (Phase 4, once the runner is built):
+#   python scripts/run_experiment.py --config configs/experiments/exp001_classwise_pathmnist.yaml
+
+# ── Reproducibility ──────────────────────────────────────────────────────────
+experiment:
+  name: exp001_classwise_pathmnist
+  seeds: [42, 123, 456]           # three runs → results reported as mean ± std
+
+# ── Dataset ──────────────────────────────────────────────────────────────────
+dataset:
+  name: pathmnist                 # implements BaseMedForgetDataset
+
+# ── Forget scenario ──────────────────────────────────────────────────────────
+scenario:
+  name: classwise                 # implements BaseForgetScenario
+  forget_class: 3                 # class index to forget (0–8); class 3 = "lymphocytes"
+
+# ── Unlearning methods ───────────────────────────────────────────────────────
+# Each entry must correspond to a class that implements BaseUnlearningMethod.
+methods:
+  - name: exact_retrain           # gold-standard baseline; retrain from scratch on retain set
+
+  - name: naive_finetune          # continue training the model on retain set only
+    epochs: 5
+    lr: 0.001
+
+  - name: gradient_ascent         # gradient ascent on forget set to un-learn those samples
+    epochs: 5
+    lr: 0.0001
+
+# ── Evaluation metrics ───────────────────────────────────────────────────────
+# Each entry must correspond to a class that implements BaseMetric.
+metrics:
+  - retain_acc      # accuracy on retain set        (higher_is_better = True)
+  - test_acc        # accuracy on held-out test set (higher_is_better = True)
+  - forget_acc      # accuracy on forget set        (higher_is_better = False)
+  - mia             # loss-threshold membership inference attack success rate
+                    #                               (higher_is_better = False)
+  - efficiency      # wall-clock time relative to exact_retrain baseline
+                    #                               (lower_is_better)
+
+# ── Output ───────────────────────────────────────────────────────────────────
+output_dir: results/exp001_classwise_pathmnist
+# Per-run JSON files will be written here:
+#   results/exp001_classwise_pathmnist/exact_retrain_seed42.json
+#   results/exp001_classwise_pathmnist/naive_finetune_seed42.json
+#   ...
+# The report generator (Phase 4) reads these and produces the final table.
