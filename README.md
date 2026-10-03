@@ -6,8 +6,6 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.2+-orange.svg)](https://pytorch.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-*FAST NUCES Lahore — Undergraduate Research Project*
-
 ---
 
 ## Motivation
