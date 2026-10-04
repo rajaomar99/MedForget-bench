@@ -80,8 +80,10 @@ class NaiveFineTune(BaseUnlearningMethod):
         optimizer = torch.optim.Adam(unlearned_model.parameters(), lr=self._lr)
         criterion = nn.CrossEntropyLoss()
 
+        from tqdm import tqdm
         for epoch in range(self._num_epochs):
-            for imgs, labels in loader:
+            pbar = tqdm(loader, desc=f"NaiveFineTune Epoch {epoch+1}/{self._num_epochs}", leave=False)
+            for imgs, labels in pbar:
                 imgs = imgs.to(device)
                 labels = labels.squeeze(1).long().to(device)
 
@@ -90,6 +92,8 @@ class NaiveFineTune(BaseUnlearningMethod):
                 loss = criterion(logits, labels)
                 loss.backward()
                 optimizer.step()
+                
+                pbar.set_postfix({"loss": loss.item()})
 
         unlearned_model.eval()
         return unlearned_model

@@ -91,9 +91,11 @@ class ExactRetrain(BaseUnlearningMethod):
 
         # ── Training loop ─────────────────────────────────────────────────────
         fresh_model.train()
-        for epoch in tqdm(range(self._epochs), desc="ExactRetrain", unit="epoch"):
+        for epoch in range(self._epochs):
             epoch_loss = 0.0
-            for imgs, labels in loader:
+            
+            pbar = tqdm(loader, desc=f"ExactRetrain Epoch {epoch+1}/{self._epochs}", leave=False)
+            for imgs, labels in pbar:
                 imgs   = imgs.to(device)
                 labels = labels.squeeze(1).long().to(device)  # (B,1) → (B,)
 
@@ -104,5 +106,6 @@ class ExactRetrain(BaseUnlearningMethod):
                 optimizer.step()
 
                 epoch_loss += loss.item()
+                pbar.set_postfix({"loss": loss.item()})
 
         return fresh_model
