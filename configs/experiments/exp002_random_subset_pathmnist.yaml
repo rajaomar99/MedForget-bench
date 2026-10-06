@@ -1,0 +1,35 @@
+# configs/experiments/exp002_random_subset_pathmnist.yaml
+
+# ── Reproducibility ──────────────────────────────────────────────────────────
+experiment:
+  name: exp002_random_subset_pathmnist
+  seeds: [42]           # Just 1 seed for testing
+
+# ── Dataset ──────────────────────────────────────────────────────────────────
+dataset:
+  name: pathmnist
+
+# ── Forget scenario ──────────────────────────────────────────────────────────
+scenario:
+  name: random_subset
+  forget_ratio: 0.1     # Forget a random 10% of the entire dataset
+
+# ── Unlearning methods ───────────────────────────────────────────────────────
+methods:
+  - name: exact_retrain
+    epochs: 1
+
+  - name: naive_finetune
+    epochs: 1
+    lr: 0.001
+
+# ── Metrics to evaluate ──────────────────────────────────────────────────────
+metrics:
+  - retain_acc
+  - test_acc
+  - forget_acc
+  - mia
+  - efficiency
+
+# ── Output ───────────────────────────────────────────────────────────────────
+output_dir: results/exp002_random_subset_pathmnist

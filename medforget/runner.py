@@ -22,6 +22,7 @@ import yaml
 
 from medforget.datasets.pathmnist import PathMNISTDataset
 from medforget.scenarios.classwise import ClasswiseForgetScenario
+from medforget.scenarios.random_subset import RandomSubsetForgetScenario
 from medforget.models.resnet18 import build_resnet18
 from medforget.methods.exact_retrain import ExactRetrain
 from medforget.methods.finetune import NaiveFineTune
@@ -42,6 +43,7 @@ _DATASET_REGISTRY = {
 
 _SCENARIO_REGISTRY = {
     "classwise": ClasswiseForgetScenario,
+    "random_subset": RandomSubsetForgetScenario,
 }
 
 _METHOD_REGISTRY = {
