@@ -106,3 +106,28 @@ class TestClasswiseForgetScenario:
         overlap = set(forget_set.indices) & set(retain_set.indices)
         assert len(overlap) == 0
         assert len(forget_set) + len(retain_set) == len(dummy_ds)
+
+# ── Tests: RandomSubsetForgetScenario ─────────────────────────────────────────
+
+from medforget.scenarios.random_subset import RandomSubsetForgetScenario
+
+class TestRandomSubsetForgetScenario:
+
+    def test_name(self):
+        assert RandomSubsetForgetScenario().name == "random_subset"
+
+    def test_disjoint(self, dummy_ds):
+        forget_set, retain_set = RandomSubsetForgetScenario(forget_ratio=0.1).apply(dummy_ds)
+        overlap = set(forget_set.indices) & set(retain_set.indices)
+        assert len(overlap) == 0, "Forget and retain sets must not overlap"
+
+    def test_exhaustive(self, dummy_ds):
+        forget_set, retain_set = RandomSubsetForgetScenario(forget_ratio=0.1).apply(dummy_ds)
+        assert len(forget_set) + len(retain_set) == len(dummy_ds)
+
+    @pytest.mark.parametrize("forget_ratio", [0.1, 0.25, 0.5])
+    def test_forget_set_size(self, dummy_ds, forget_ratio):
+        forget_set, retain_set = RandomSubsetForgetScenario(forget_ratio=forget_ratio).apply(dummy_ds)
+        expected_size = int(len(dummy_ds) * forget_ratio)
+        assert len(forget_set) == expected_size
+        assert len(retain_set) == len(dummy_ds) - expected_size
