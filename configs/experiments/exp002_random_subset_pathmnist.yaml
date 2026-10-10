@@ -3,7 +3,7 @@
 # ── Reproducibility ──────────────────────────────────────────────────────────
 experiment:
   name: exp002_random_subset_pathmnist
-  seeds: [42]           # Just 1 seed for testing
+  seeds: [42, 123, 456]           # three runs → results reported as mean ± std
 
 # ── Dataset ──────────────────────────────────────────────────────────────────
 dataset:
@@ -17,11 +17,14 @@ scenario:
 # ── Unlearning methods ───────────────────────────────────────────────────────
 methods:
   - name: exact_retrain
-    epochs: 1
 
   - name: naive_finetune
-    epochs: 1
+    epochs: 5
     lr: 0.001
+
+  - name: gradient_ascent
+    epochs: 5
+    lr: 0.0001
 
 # ── Metrics to evaluate ──────────────────────────────────────────────────────
 metrics:
