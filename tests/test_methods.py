@@ -79,3 +79,18 @@ class TestMethods:
         assert not torch.equal(unlearned.fc.weight.data, original_weights)
         # Verify baseline model's weights were NOT mutated
         assert torch.equal(baseline.fc.weight.data, original_weights)
+
+    def test_gradient_ascent(self, dummy_data):
+        from medforget.methods.gradient_ascent import GradientAscent
+        forget_ds, retain_ds = dummy_data
+        
+        baseline = DummyModel()
+        original_weights = baseline.fc.weight.data.clone()
+        
+        method = GradientAscent(epochs=1, batch_size=16, num_workers=0)
+        unlearned = method.run(baseline, forget_ds, retain_ds)
+        
+        assert isinstance(unlearned, nn.Module)
+        assert unlearned is not baseline
+        assert not torch.equal(unlearned.fc.weight.data, original_weights)
+        assert torch.equal(baseline.fc.weight.data, original_weights)

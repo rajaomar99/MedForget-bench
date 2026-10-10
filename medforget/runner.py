@@ -26,6 +26,7 @@ from medforget.scenarios.random_subset import RandomSubsetForgetScenario
 from medforget.models.resnet18 import build_resnet18
 from medforget.methods.exact_retrain import ExactRetrain
 from medforget.methods.finetune import NaiveFineTune
+from medforget.methods.gradient_ascent import GradientAscent
 from medforget.metrics.utility import RetainAccuracy, TestAccuracy
 from medforget.metrics.forgetting import ForgetAccuracy
 from medforget.metrics.mia import LossThresholdMIA
@@ -49,6 +50,7 @@ _SCENARIO_REGISTRY = {
 _METHOD_REGISTRY = {
     "exact_retrain": ExactRetrain,
     "naive_finetune": NaiveFineTune,
+    "gradient_ascent": GradientAscent,
 }
 
 _METRIC_REGISTRY = {
@@ -83,6 +85,13 @@ def _build_method(method_cfg: dict, model_factory, batch_size: int, num_workers:
     elif name == "naive_finetune":
         return _METHOD_REGISTRY[name](
             num_epochs=epochs,
+            lr=lr,
+            batch_size=batch_size,
+            num_workers=num_workers,
+        )
+    elif name == "gradient_ascent":
+        return _METHOD_REGISTRY[name](
+            epochs=epochs,
             lr=lr,
             batch_size=batch_size,
             num_workers=num_workers,
