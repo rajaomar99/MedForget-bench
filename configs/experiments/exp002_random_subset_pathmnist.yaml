@@ -23,7 +23,7 @@ methods:
     lr: 0.001
 
   - name: gradient_ascent
-    epochs: 5
+    epochs: 2
     lr: 0.0001
 
 # ── Metrics to evaluate ──────────────────────────────────────────────────────

@@ -32,7 +32,7 @@ methods:
     lr: 0.001
 
   - name: gradient_ascent         # gradient ascent on forget set to un-learn those samples
-    epochs: 5
+    epochs: 2
     lr: 0.0001
 
 # ── Evaluation metrics ───────────────────────────────────────────────────────
