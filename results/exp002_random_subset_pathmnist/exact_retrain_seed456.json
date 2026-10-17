@@ -1,0 +1,11 @@
+{
+    "experiment": "exp002_random_subset_pathmnist",
+    "method": "exact_retrain",
+    "seed": 456,
+    "time_seconds": 2238.7132,
+    "retain_acc": 0.995086,
+    "test_acc": 0.874095,
+    "forget_acc": 0.973886,
+    "mia": 0.612213,
+    "efficiency": 1.0
+}

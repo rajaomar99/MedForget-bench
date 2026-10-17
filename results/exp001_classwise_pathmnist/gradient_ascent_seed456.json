@@ -1,0 +1,11 @@
+{
+    "experiment": "exp001_classwise_pathmnist",
+    "method": "gradient_ascent",
+    "seed": 456,
+    "time_seconds": 134.2489,
+    "retain_acc": 0.81431,
+    "test_acc": 0.467131,
+    "forget_acc": 0.0,
+    "mia": 0.081793,
+    "efficiency": 0.060756
+}

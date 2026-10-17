@@ -1,0 +1,11 @@
+{
+    "experiment": "exp002_random_subset_pathmnist",
+    "method": "naive_finetune",
+    "seed": 42,
+    "time_seconds": 371.3064,
+    "retain_acc": 0.999333,
+    "test_acc": 0.893733,
+    "forget_acc": 0.998667,
+    "mia": 0.607083,
+    "efficiency": 0.166521
+}

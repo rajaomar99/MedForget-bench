@@ -26,9 +26,8 @@ ENV/
 *.ipynb_checkpoints
 
 # ======================
-# Results, checkpoints (large files — keep locally, not in git)
+# Checkpoints & weights (large binary files — keep locally, not in git)
 # ======================
-results/
 checkpoints/
 *.pth
 *.pt

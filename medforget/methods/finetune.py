@@ -25,7 +25,7 @@ class NaiveFineTune(BaseUnlearningMethod):
     """Naive Fine-Tuning on the retain set.
 
     Args:
-        num_epochs:  How many epochs to fine-tune for (default: 5).
+        epochs:      How many epochs to fine-tune for (default: 5).
                      Requires far fewer epochs than training from scratch.
         lr:          Learning rate for Adam optimizer.
         batch_size:  Training batch size.
@@ -34,12 +34,12 @@ class NaiveFineTune(BaseUnlearningMethod):
 
     def __init__(
         self,
-        num_epochs: int = 5,
+        epochs: int = 5,
         lr: float = 1e-3,
         batch_size: int = 256,
         num_workers: int = 0,
     ):
-        self._num_epochs = num_epochs
+        self._epochs = epochs
         self._lr = lr
         self._batch_size = batch_size
         self._num_workers = num_workers
@@ -81,8 +81,8 @@ class NaiveFineTune(BaseUnlearningMethod):
         criterion = nn.CrossEntropyLoss()
 
         from tqdm import tqdm
-        for epoch in range(self._num_epochs):
-            pbar = tqdm(loader, desc=f"NaiveFineTune Epoch {epoch+1}/{self._num_epochs}", leave=False)
+        for epoch in range(self._epochs):
+            pbar = tqdm(loader, desc=f"NaiveFineTune Epoch {epoch+1}/{self._epochs}", leave=False)
             for imgs, labels in pbar:
                 imgs = imgs.to(device)
                 labels = labels.squeeze(1).long().to(device)

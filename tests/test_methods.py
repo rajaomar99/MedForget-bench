@@ -69,7 +69,7 @@ class TestMethods:
         # Save original weights to check if they change
         original_weights = baseline.fc.weight.data.clone()
         
-        method = NaiveFineTune(num_epochs=1, batch_size=16, num_workers=0)
+        method = NaiveFineTune(epochs=1, batch_size=16, num_workers=0)
         unlearned = method.run(baseline, forget_ds, retain_ds)
         
         assert isinstance(unlearned, nn.Module)

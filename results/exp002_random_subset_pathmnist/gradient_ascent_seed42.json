@@ -1,0 +1,11 @@
+{
+    "experiment": "exp002_random_subset_pathmnist",
+    "method": "gradient_ascent",
+    "seed": 42,
+    "time_seconds": 139.3359,
+    "retain_acc": 0.898453,
+    "test_acc": 0.801671,
+    "forget_acc": 0.88232,
+    "mia": 0.588108,
+    "efficiency": 0.062488
+}

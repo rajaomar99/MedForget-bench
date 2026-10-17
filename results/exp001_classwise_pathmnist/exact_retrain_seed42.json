@@ -1,0 +1,11 @@
+{
+    "experiment": "exp001_classwise_pathmnist",
+    "method": "exact_retrain",
+    "seed": 42,
+    "time_seconds": 2198.7582,
+    "retain_acc": 0.997324,
+    "test_acc": 0.810585,
+    "forget_acc": 0.0,
+    "mia": 0.04357,
+    "efficiency": 1.0
+}

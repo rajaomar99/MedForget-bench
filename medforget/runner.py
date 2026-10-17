@@ -13,6 +13,7 @@ Expected output structure (from YAML output_dir):
     ...
 """
 
+import inspect
 import json
 import time
 from pathlib import Path
@@ -36,7 +37,7 @@ from medforget.utils.seed import set_seed
 
 # ── Plugin registries ─────────────────────────────────────────────────────────
 # Maps config-file name strings to Python classes.
-# To add a new dataset or scenario, just add an entry here — runner stays unchanged.
+# To add a new dataset, scenario, method, or metric, just register it here.
 
 _DATASET_REGISTRY = {
     "pathmnist": PathMNISTDataset,
@@ -63,39 +64,38 @@ _METRIC_REGISTRY = {
 
 
 def _build_method(method_cfg: dict, model_factory, batch_size: int, num_workers: int):
-    """Instantiate an unlearning method from its YAML config block.
-
-    Returns None for methods not yet implemented (will be skipped by runner).
-    """
-    name = method_cfg["name"]
-    epochs = method_cfg.get("epochs", 30)  # exact_retrain has no epochs in YAML; default 30
-    lr = float(method_cfg.get("lr", 1e-3))
-
+    """Instantiate any registered unlearning method from its YAML config block."""
+    name = method_cfg.get("name")
     if name not in _METHOD_REGISTRY:
-        return None  # Phase 6 methods (gradient_ascent, etc.) are not yet implemented
+        raise ValueError(
+            f"Unknown unlearning method '{name}'. Registered methods: {list(_METHOD_REGISTRY.keys())}"
+        )
 
-    if name == "exact_retrain":
-        return _METHOD_REGISTRY[name](
-            model_factory=model_factory,
-            epochs=epochs,
-            lr=lr,
-            batch_size=batch_size,
-            num_workers=num_workers,
-        )
-    elif name == "naive_finetune":
-        return _METHOD_REGISTRY[name](
-            num_epochs=epochs,
-            lr=lr,
-            batch_size=batch_size,
-            num_workers=num_workers,
-        )
-    elif name == "gradient_ascent":
-        return _METHOD_REGISTRY[name](
-            epochs=epochs,
-            lr=lr,
-            batch_size=batch_size,
-            num_workers=num_workers,
-        )
+    cls = _METHOD_REGISTRY[name]
+    sig = inspect.signature(cls.__init__)
+
+    # Base parameters provided by the benchmark harness
+    kwargs = {}
+    if "batch_size" in sig.parameters:
+        kwargs["batch_size"] = batch_size
+    if "num_workers" in sig.parameters:
+        kwargs["num_workers"] = num_workers
+    if "model_factory" in sig.parameters:
+        kwargs["model_factory"] = model_factory
+
+    # Method training duration (epochs)
+    epochs = method_cfg.get("epochs", 30 if name == "exact_retrain" else 5)
+    if "epochs" in sig.parameters:
+        kwargs["epochs"] = epochs
+
+    # Forward any remaining YAML parameters (e.g. lr, weight_decay, etc.)
+    for k, v in method_cfg.items():
+        if k in ("name", "epochs"):
+            continue
+        if k in sig.parameters:
+            kwargs[k] = v
+
+    return cls(**kwargs)
 
 
 def run_experiment(config_path: str) -> None:
@@ -195,10 +195,6 @@ def run_experiment(config_path: str) -> None:
             method_name = method_cfg["name"]
 
             method = _build_method(method_cfg, model_factory, BATCH_SIZE, NUM_WORKERS)
-            if method is None:
-                print(f"\n  [skip] '{method_name}' not yet implemented (Phase 6)")
-                continue
-
             print(f"\nRunning: {method_name}")
 
             # Load a clean, untouched baseline for every method
